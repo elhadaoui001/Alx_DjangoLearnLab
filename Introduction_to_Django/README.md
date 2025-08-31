@@ -14,3 +14,4 @@ This is the initial setup of a Django project created for learning purposes.
 - **urls.py** → Defines the URL routes of the project.
 - **wsgi.py/asgi.py** → Entry points for deploying the app on servers.
 
+
