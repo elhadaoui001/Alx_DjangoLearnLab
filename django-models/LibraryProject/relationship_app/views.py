@@ -4,6 +4,9 @@ from django.views.generic.detail import DetailView
 from .models import Book 
 from django.contrib.auth.decorators import user_passes_test
 from .models import UserProfile
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import permission_required
+from django import forms
 
 # --- Function-Based View ---
 # List all books stored in the database
@@ -52,3 +55,43 @@ def librarian_view(request):
 @user_passes_test(lambda u: hasattr(u, 'userprofile') and u.userprofile.role == 'Member')
 def member_view(request):
     return render(request, "relationship_app/member_view.html")
+
+# Simple Book form
+class BookForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ["title", "author", "published_date", "library"]
+
+# Add book (requires permission)
+@permission_required("relationship_app.can_add_book")
+def add_book(request):
+    if request.method == "POST":
+        form = BookForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("list_books")  # redirect to list
+    else:
+        form = BookForm()
+    return render(request, "relationship_app/add_book.html", {"form": form})
+
+# Edit book (requires permission)
+@permission_required("relationship_app.can_change_book")
+def edit_book(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    if request.method == "POST":
+        form = BookForm(request.POST, instance=book)
+        if form.is_valid():
+            form.save()
+            return redirect("list_books")
+    else:
+        form = BookForm(instance=book)
+    return render(request, "relationship_app/edit_book.html", {"form": form, "book": book})
+
+# Delete book (requires permission)
+@permission_required("relationship_app.can_delete_book")
+def delete_book(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    if request.method == "POST":
+        book.delete()
+        return redirect("list_books")
+    return render(request, "relationship_app/delete_book.html", {"book": book})
