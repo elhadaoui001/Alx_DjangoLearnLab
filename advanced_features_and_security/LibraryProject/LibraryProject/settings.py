@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bookshelf',
      'relationship_app',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -130,3 +131,4 @@ LOGOUT_REDIRECT_URL = 'login'
 
 # Use custom user model
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
