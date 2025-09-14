@@ -132,3 +132,37 @@ LOGOUT_REDIRECT_URL = 'login'
 # Use custom user model
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
+# LibraryProject/LibraryProject/settings.py (relevant excerpts)
+import os
+
+# Use environment variable; default to True for dev only
+DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
+
+# Must be set in production
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+
+# Security cookies
+SESSION_COOKIE_SECURE = True         # send session cookie only over HTTPS
+CSRF_COOKIE_SECURE = True            # send CSRF cookie only over HTTPS
+SESSION_COOKIE_HTTPONLY = True       # prevent JS access to session cookie
+# NOTE: setting CSRF_COOKIE_HTTPONLY=True prevents JS from reading the CSRF cookie.
+# If your JS needs to read the cookie (for XHR), leave it False and use the csrftoken header approach.
+
+# Browser protections
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'            # prevents the site being iframed
+
+# HSTS (only enable after you are certain HTTPS works)
+SECURE_HSTS_SECONDS = 31536000      # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# Force HTTPS redirect
+SECURE_SSL_REDIRECT = True
+
+# Other best-practices
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # if behind proxy (NGINX, Heroku)
+
+# Use a secure SECRET_KEY from environment in production
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-secret-key")
