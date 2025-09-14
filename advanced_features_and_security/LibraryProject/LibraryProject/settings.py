@@ -128,3 +128,5 @@ LOGIN_REDIRECT_URL = 'list_books'
 LOGOUT_REDIRECT_URL = 'login'
 
 
+# Use custom user model
+AUTH_USER_MODEL = 'accounts.CustomUser'
