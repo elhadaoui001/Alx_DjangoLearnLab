@@ -166,3 +166,11 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # if behind proxy
 
 # Use a secure SECRET_KEY from environment in production
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-secret-key")
+
+# Redirect all HTTP requests to HTTPS
+SECURE_SSL_REDIRECT = True  
+
+# Enable HTTP Strict Transport Security (HSTS)
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
